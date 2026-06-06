@@ -1,3 +1,4 @@
+import { Component, type ReactNode } from "react";
 import Particles, { ParticlesProvider, useParticlesProvider } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
 import type { Engine } from "@tsparticles/engine";
@@ -15,14 +16,11 @@ function Inner() {
       className="absolute inset-0"
       options={{
         background: { color: { value: "transparent" } },
-        fpsLimit: 60,
+        fpsLimit: 30,
         interactivity: {
           events: {
-            onHover: { enable: true, mode: "grab" },
+            onHover: { enable: false },
             resize: { enable: true },
-          },
-          modes: {
-            grab: { distance: 180, links: { opacity: 0.6 } },
           },
         },
         particles: {
@@ -31,30 +29,46 @@ function Inner() {
             color: "#00d4ff",
             distance: 150,
             enable: true,
-            opacity: 0.25,
+            opacity: 0.2,
             width: 1,
           },
           move: {
             enable: true,
-            speed: 0.8,
+            speed: 0.5,
             direction: "none",
             outModes: { default: "bounce" },
           },
-          number: { value: 80, density: { enable: true } },
-          opacity: { value: 0.6 },
+          number: { value: 30, density: { enable: true } },
+          opacity: { value: 0.4 },
           shape: { type: "circle" },
-          size: { value: { min: 1, max: 3 } },
+          size: { value: { min: 1, max: 2 } },
         },
-        detectRetina: true,
+        detectRetina: false,
       }}
     />
   );
 }
 
+class ParticleErrorBoundary extends Component<
+  { children: ReactNode },
+  { crashed: boolean }
+> {
+  state = { crashed: false };
+  componentDidCatch() {
+    this.setState({ crashed: true });
+  }
+  render() {
+    if (this.state.crashed) return null;
+    return this.props.children;
+  }
+}
+
 export default function ParticleBackground() {
   return (
-    <ParticlesProvider init={init}>
-      <Inner />
-    </ParticlesProvider>
+    <ParticleErrorBoundary>
+      <ParticlesProvider init={init}>
+        <Inner />
+      </ParticlesProvider>
+    </ParticleErrorBoundary>
   );
 }
