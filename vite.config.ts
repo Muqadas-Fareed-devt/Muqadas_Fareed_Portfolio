@@ -4,6 +4,6 @@ import tailwindcss from "@tailwindcss/vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  base: "/muqadas-portfolio/",
+  base: "/Muqadas_Fareed_Portfolio/",
   plugins: [react(), tailwindcss(), tsconfigPaths()],
 });
